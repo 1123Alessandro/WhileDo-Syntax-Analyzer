@@ -5,17 +5,18 @@ import java.io.*;
 public class CodeReader {
 
     private String fileName;
-    private FileReader fr;
+    private BufferedReader br;
 
     public CodeReader(String file) throws IOException {
         this.fileName = file;
-        this.fr = new FileReader(file);
+        FileReader fr = new FileReader(file);
+        this.br = new BufferedReader(fr);
     }
 
     public String output() throws IOException {
         String s = "";
-        for (int i = this.fr.read(); i != -1; i = this.fr.read()) {
-            s += (char) i;
+        for (String in = this.br.readLine() ; in != null ; in = this.br.readLine()) {
+            s += in + "\n";
         }
         return s;
     }
