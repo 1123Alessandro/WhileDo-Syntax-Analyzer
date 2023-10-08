@@ -6,7 +6,7 @@ public class Main {
 
     // DONE: parse the main structure of the while loop
     public static String[] findWhile(RegExer re, String text) {
-        String pattern = "while [(].+[)] [{].*[}]";
+        String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
@@ -30,31 +30,11 @@ public class Main {
 
         // TODO: pattern of the whole program
         RegExer re = new RegExer();
-        // String[] matches = findWhile(re, text);
-        // for (String s : matches) {
-        //     System.out.println(s);
-        // }
-
-        String[] m = re.findPattern("([{].+[}](?=.+[{]))|((?<=[}].+)[{].+[}])", text);
-        for (String s: m){
+        String[] matches = findWhile(re, text);
+        for (String s : matches) {
             System.out.println(s);
-            System.out.println("---");
+            System.out.println("===");
         }
 
-
-
-
-        // String[] m = re.findPattern("[a-z]{3}(?=dog)", text);
-        // for (String s: m) {
-        //     System.out.println(s);
-        //     System.out.println("---");
-        // }
-
-
-
-        // String[] m = re.findPattern("[a-z]+(?!hallo)", text);
-        // for (String s: m){
-        //     System.out.println(s);
-        // }
     }
 }
