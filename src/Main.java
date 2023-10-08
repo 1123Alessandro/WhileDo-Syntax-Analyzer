@@ -30,10 +30,31 @@ public class Main {
 
         // TODO: pattern of the whole program
         RegExer re = new RegExer();
-        String[] matches = findWhile(re, text);
-        for (String s : matches) {
+        // String[] matches = findWhile(re, text);
+        // for (String s : matches) {
+        //     System.out.println(s);
+        // }
+
+        String[] m = re.findPattern("([{].+[}](?=.+[{]))|((?<=[}].+)[{].+[}])", text);
+        for (String s: m){
             System.out.println(s);
+            System.out.println("---");
         }
 
+
+
+
+        // String[] m = re.findPattern("[a-z]{3}(?=dog)", text);
+        // for (String s: m) {
+        //     System.out.println(s);
+        //     System.out.println("---");
+        // }
+
+
+
+        // String[] m = re.findPattern("[a-z]+(?!hallo)", text);
+        // for (String s: m){
+        //     System.out.println(s);
+        // }
     }
 }
