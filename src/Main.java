@@ -8,7 +8,7 @@ public class Main {
     // DONE: detect all while loops within the same level
     public static String[] findWhile(RegExer re, String text) {
         // String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
-        String pattern = "while[\s\n]+[(].+[)][\s\n]+[{].+[}]";
+        String pattern = "while[\\s]+[(].+[)][\\s]+[{].+[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
