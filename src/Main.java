@@ -7,7 +7,8 @@ public class Main {
     // DONE: parse the main structure of the while loop
     // DONE: detect all while loops within the same level
     public static String[] findWhile(RegExer re, String text) {
-        String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
+        // String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
+        String pattern = "while [(].+[)] [{].+[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
