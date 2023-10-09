@@ -4,4 +4,13 @@ while (triue) {
 
     trrruee
     hello world
+    {
+        hello po
+    }
 }
+
+{
+    this is another one boi
+}
+
+haha

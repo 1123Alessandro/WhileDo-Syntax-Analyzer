@@ -5,8 +5,10 @@ import java.io.*;
 public class Main {
 
     // DONE: parse the main structure of the while loop
+    // DONE: detect all while loops within the same level
     public static String[] findWhile(RegExer re, String text) {
-        String pattern = "while [(].+[)] [{].*[}]";
+        // String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
+        String pattern = "while[\s\n]+[(].+[)][\s\n]+[{].+[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
@@ -30,9 +32,13 @@ public class Main {
 
         // TODO: pattern of the whole program
         RegExer re = new RegExer();
+
+        // TODO: get all while loops
+        // TODO: detect nested while loops
         String[] matches = findWhile(re, text);
         for (String s : matches) {
             System.out.println(s);
+            System.out.println("===");
         }
 
     }
