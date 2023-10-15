@@ -1,16 +1,3 @@
-while (triue) {
-
-    truie
-
-    trrruee
-    hello world
-    {
-        hello po
-    }
+while (x == !x) {
+    anything here
 }
-
-{
-    this is another one boi
-}
-
-haha
