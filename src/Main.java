@@ -13,10 +13,12 @@ public class Main {
         return matches;
     }
 
-    // TODO: parse the logic area of the while loop
+    // DONE: parse the logic area of the while loop
+    // TODO: bugfix regex
     public static boolean findLogic(RegExer re, String text) {
         String pattern = "while\\s*(\\([^)]*\\))\\s*\\{";
         String m = re.extractWhileCondition(pattern, text);
+        // System.out.println("M ==========" + m);
         boolean flag = false;
 
         m = m.replaceAll("\\s+", "");
@@ -75,8 +77,15 @@ public class Main {
         //     System.out.println("===");
         // }
 
-        String conclu = validityChecker(findLogic(re, text));
-        System.out.println("Valid or not: " + conclu);
+        // String conclu = validityChecker(findLogic(re, text));
+        // System.out.println("Valid or not: " + conclu);
+
+        String pattern = "[(]([\\s]*!*[a-zA-Z_$]+[\\s]*|!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+)[)]";
+        String[] m = re.findPattern(pattern, text);
+        for (String s: m) {
+            System.out.println(s);
+            System.out.println("===");
+        }
 
     }
 }
