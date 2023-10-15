@@ -64,14 +64,11 @@ public class Main {
 
         // DEPRECATED: get all while loops
         // DEPRECATED: detect nested while loops
-        // String[] matches = findWhile(re, text);
-        // for (String s : matches) {
-        //     System.out.println(s);
-        //     System.out.println("===");
-        // }
-
-        String conclu = validityChecker(findLogic(re, text));
-        System.out.println("Valid or not: " + conclu);
+        String[] matches = findWhile(re, text);
+        for (String s : matches) {
+            System.out.println(s);
+            System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
+        }
 
     }
 }
