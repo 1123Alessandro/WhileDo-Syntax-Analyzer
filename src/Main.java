@@ -80,7 +80,16 @@ public class Main {
         // String conclu = validityChecker(findLogic(re, text));
         // System.out.println("Valid or not: " + conclu);
 
-        String pattern = "[(]([\\s]*!*[a-zA-Z_$]+[\\s]*|!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+)[)]";
+        String[] pats = {
+            "[\\s]*!*[a-zA-Z_$]+[\\s]*", // single bool var
+            "!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+", // bool var to bool var
+            "-*([a-zA-Z_$]+|[0-9]+)[\\s]*(==|!=|<=|>=|<|>)[\\s]*-*([a-zA-Z_$]+|[0-9]+)", // int var/constant to int var/constant
+        };
+        String pattern = "[(](";
+        for (int i = 0; i < pats.length; i++){
+            pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
+        }
+        pattern += ")[)]";
         String[] m = re.findPattern(pattern, text);
         for (String s: m) {
             System.out.println(s);
