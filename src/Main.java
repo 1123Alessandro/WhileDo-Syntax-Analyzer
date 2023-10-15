@@ -47,7 +47,7 @@ public class Main {
         }
     }
 
-    // TODO: parse the content area of the while loop to include nested whiles
+    // DEPRECATED: parse the content area of the while loop to include nested whiles
     public static String[] findContent(RegExer re, String text) {
         return null;
     }
