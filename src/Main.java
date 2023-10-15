@@ -14,35 +14,28 @@ public class Main {
     }
 
     // DONE: parse the logic area of the while loop
-    // TODO: bugfix regex
+    // DONE: bugfix regex
     public static boolean findLogic(RegExer re, String text) {
-        String pattern = "while\\s*(\\([^)]*\\))\\s*\\{";
-        String m = re.extractWhileCondition(pattern, text);
+        String whilePattern = "while\\s*(\\([^)]*\\))\\s*\\{";
+        String m = re.extractWhileCondition(whilePattern, text);
         // System.out.println("M ==========" + m);
         boolean flag = false;
 
-        m = m.replaceAll("\\s+", "");
-        System.out.println(m);
+        // m = m.replaceAll("\\s+", "");
+        // System.out.println(m);
 
-        String firstP = m.substring(0, 1);
-        String secondP = m.substring(m.length() - 1);
-        //System.out.println(firstP);
-        //System.out.println(secondP);
-        if(firstP.equals("(") && secondP.equals(")")) {
-            flag = true;
+        String[] pats = {
+            "[\\s]*!*[a-zA-Z_$]+[\\s]*", // single bool var
+            "!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+", // bool var to bool var
+            "-*([a-zA-Z_$]+|[0-9]+)[\\s]*(==|!=|<=|>=|<|>)[\\s]*-*([a-zA-Z_$]+|[0-9]+)", // int var/constant to int var/constant
+        };
+        String pattern = "[(](";
+        for (int i = 0; i < pats.length; i++){
+            pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
         }
+        pattern += ")[)]";
 
-        // Check if each part contains a variable name followed by a comparison operator
-        if(m.matches("[a-zA-Z_][a-zA-Z0-9_]*[<>!=]=?[<>]?[0-9]+")) {
-            flag = true;
-        }
-        else if(m.matches("[a-zA-Z_][a-zA-Z0-9_]*[<>!=]=?[<>]?[a-zA-Z_][a-zA-Z0-9_]*")) {
-            flag = true;
-        }
-
-        return flag;
-
-        //return matches;
+        return m.matches(pattern);
     }
 
     public static String validityChecker(boolean flag) {
@@ -63,7 +56,7 @@ public class Main {
         CodeReader obj = new CodeReader("test.txt");
         String text = obj.output();
         System.out.println("Original code:------------------------------------");
-        System.out.println(text);
+        System.out.print(text);
         System.out.println("--------------------------------------------------");
 
         // TODO: pattern of the whole program
@@ -77,24 +70,8 @@ public class Main {
         //     System.out.println("===");
         // }
 
-        // String conclu = validityChecker(findLogic(re, text));
-        // System.out.println("Valid or not: " + conclu);
-
-        String[] pats = {
-            "[\\s]*!*[a-zA-Z_$]+[\\s]*", // single bool var
-            "!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+", // bool var to bool var
-            "-*([a-zA-Z_$]+|[0-9]+)[\\s]*(==|!=|<=|>=|<|>)[\\s]*-*([a-zA-Z_$]+|[0-9]+)", // int var/constant to int var/constant
-        };
-        String pattern = "[(](";
-        for (int i = 0; i < pats.length; i++){
-            pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
-        }
-        pattern += ")[)]";
-        String[] m = re.findPattern(pattern, text);
-        for (String s: m) {
-            System.out.println(s);
-            System.out.println("===");
-        }
+        String conclu = validityChecker(findLogic(re, text));
+        System.out.println("Valid or not: " + conclu);
 
     }
 }
