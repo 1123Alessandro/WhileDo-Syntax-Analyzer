@@ -1,15 +1,8 @@
-// nested while loops
-int outerCount = 0;
+// while loop with invalid symbol in statements
+int num = 10;
+int x, y;
 
-while (outerCount < 3) {
-    System.out.println("Outer while loop count: " + outerCount);
-
-    int innerCount = 0;
-
-    while (innerCount < 2) {
-        System.out.println("Inner while loop count: " + innerCount);
-        innerCount++;
-    }
-
-    outerCount++;
+while (num > 0) {
+    x = 5;
+    !y = 10;
 }

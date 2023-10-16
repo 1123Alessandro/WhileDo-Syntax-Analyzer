@@ -1,7 +1,0 @@
-// missing "while" keyword in loop declaration
-int count = 0;
-
-(count < 5) {
-    System.out.println("Count: " + count);
-    count++;
-}

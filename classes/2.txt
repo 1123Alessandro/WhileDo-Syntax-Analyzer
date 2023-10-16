@@ -1,6 +1,7 @@
-// missing closing brace
-int count = 0;
+// while loop with a constant condition
+int count = 1;
 
-while (count < 5) {
+while (5 < 10) {
     System.out.println("Count: " + count);
     count++;
+}

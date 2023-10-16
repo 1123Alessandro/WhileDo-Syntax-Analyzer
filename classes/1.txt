@@ -1,7 +1,7 @@
-// missing opening brace
-int count = 0;
+// while loop with invalid logic condition
+int count = 5;
 
-while (count < 5)
+while (count > 10) {
     System.out.println("Count: " + count);
     count++;
 }
