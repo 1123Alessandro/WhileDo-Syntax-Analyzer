@@ -37,19 +37,11 @@ public class Main {
         return m.matches(pattern);
     }
 
-    public static String validityChecker(boolean flag) {
-        if(flag == true) {
-            return "Valid Syntax";
-        }
-        else {
-            return "Invalid Syntax";
-        }
-    }
-
-    // DEPRECATED: parse the content area of the while loop to include nested whiles
+    // TODO: parse the content area of the while loop to include nested whiles
     public static boolean findContent(RegExer re, String text) {
         // get the content of the while loop
         String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+(?<content>[{]([^{}]+)*[}])";
+        // String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+[{](?<content>[^{}]+)*[}]";
         Pattern p = Pattern.compile(whilePattern, Pattern.DOTALL);
         Matcher m = p.matcher(text);
         if (!m.find()) return false;
@@ -57,17 +49,52 @@ public class Main {
         // System.out.println("CONTENT ==================== \n" + text);
 
         String[] pats = {
-            "[\\s]*(int|float|char|double|long)?[\\s]+[a-zA-Z_$]+[\\s]*(=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+|[0-9]+);[\\s]*",
-            "[\\s]*",
+            "[\\s]*;[\\s]*", // just a semicolon
+            "[\\s]*([a-zA-Z]+.)*[a-zA-Z]+[(][\"'\\w]*[)][\\s]*;[\\s]*", // calling functions
+            "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[\\w]*[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+[\\w]*|[0-9]+)[\\s]*;[\\s]*", // variable declaration with assignment
+            "[\\s]*[a-zA-Z_$]+[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z]+|[0-9]+)[\\s]*;[\\s]*", // variable assignment
+            "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[$\\w]*[\\s]*;[\\s]*", // variable declaration
+            // "[\\s]*(int|float|char|double|long)?[\\s]+[a-zA-Z_$]+[\\s]*(=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+|[0-9]+);[\\s]*",
+            // "[\\s]*",
             // ".*",
         };
         String pattern = "[{](";
         for (int i = 0; i < pats.length; i++) {
             pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
         }
-        pattern += ")[}]";
-        String[] matches = re.findPattern(pattern, text);
-        return true;
+        pattern += ")*[\\s]*[}]";
+        // System.out.println("Pattern ==================== " + pattern);
+        // System.out.println(text);
+        // String[] matches = re.findPattern(pattern, text);
+        // String[] uu = re.findPattern(pattern, text);
+        // for (String s: uu) {
+        //     System.out.println("---");
+        //     System.out.println(s);
+        // }
+        return text.matches(pattern);
+    }
+
+    public static String[] checkContent(RegExer re, String text) {
+        String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+[{](?<content>[^{}]+)*[}]";
+        Pattern p = Pattern.compile(whilePattern, Pattern.DOTALL);
+        Matcher m = p.matcher(text);
+        if (!m.find()) return null;
+        text = m.group("content");
+
+        // System.out.println(text);
+        String[][] errors = {
+            {""},
+        };
+        return null;
+    }
+
+    public static String validityChecker(boolean flag) {
+        if(flag == true) {
+            return "Valid Syntax";
+        }
+        else {
+            return "Invalid Syntax";
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -84,9 +111,11 @@ public class Main {
         // DEPRECATED: detect nested while loops
         String[] matches = findWhile(re, text);
         for (String s : matches) {
-            System.out.println(s);
-            System.out.println(findContent(re, s));
-            // System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
+            // System.out.println(s);
+            boolean content = findContent(re, s);
+            if (!content) checkContent(re, s);
+            System.out.println("============================== "+ content);
+            System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
         }
 
 
