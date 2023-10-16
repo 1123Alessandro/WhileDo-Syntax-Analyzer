@@ -7,18 +7,7 @@ public class Main {
     // DONE: parse the main structure of the while loop
     // DONE: detect all while loops within the same level
     public static String[] findWhile(RegExer re, String text) {
-        // String pattern = "(while [(].+[)] [{].+[}](?=.+[{]))|((?<=[}].+)while [(].+[)] [{].+[}])";
-        // String pattern = "while[\\s]+[(].+[)][\\s]+[{].+[}]";
-        String[] pats = {
-            // "[\\s]*[a-zA-Z0-9_$=+-/*\\s;]+[\\s]*",
-            "[^{}]+",
-        };
-        // String pattern = "while[\\s]+[(].+[)][\\s]+[{](";
-        String pattern = "while[\\s]+[(][^()]+[)][\\s]+[{](";
-        for (int i = 0; i < pats.length; i++) {
-            pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
-        }
-        pattern += ")*[}]";
+        String pattern = "while[\\s]+[(][^()]+[)][\\s]+[{]([^{}]+)*[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
@@ -58,19 +47,27 @@ public class Main {
     }
 
     // DEPRECATED: parse the content area of the while loop to include nested whiles
-    public static String[] findContent(RegExer re, String text) {
+    public static boolean findContent(RegExer re, String text) {
+        // get the content of the while loop
+        String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+(?<content>[{]([^{}]+)*[}])";
+        Pattern p = Pattern.compile(whilePattern, Pattern.DOTALL);
+        Matcher m = p.matcher(text);
+        if (!m.find()) return false;
+        text = m.group("content");
+        // System.out.println("CONTENT ==================== \n" + text);
+
         String[] pats = {
             "[\\s]*(int|float|char|double|long)?[\\s]+[a-zA-Z_$]+[\\s]*(=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+|[0-9]+);[\\s]*",
-            "[\\s]*"
+            "[\\s]*",
             // ".*",
         };
-        String pattern = "while[\\s]+[(].+[)][\\s]+[{](";
+        String pattern = "[{](";
         for (int i = 0; i < pats.length; i++) {
             pattern += (i == pats.length-1) ? pats[i] : (pats[i] + "|");
         }
         pattern += ")[}]";
         String[] matches = re.findPattern(pattern, text);
-        return matches;
+        return true;
     }
 
     public static void main(String[] args) throws IOException {
@@ -88,8 +85,10 @@ public class Main {
         String[] matches = findWhile(re, text);
         for (String s : matches) {
             System.out.println(s);
-            System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
+            System.out.println(findContent(re, s));
+            // System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
         }
+
 
     }
 }
