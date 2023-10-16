@@ -35,9 +35,9 @@ public class Main {
         // System.out.println(m);
 
         String[] pats = {
-            "[\\s]*!*[a-zA-Z_$]+[\\s]*", // single bool var
-            "!*[a-zA-Z_$]+[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+", // bool var to bool var
-            "-*([a-zA-Z_$]+|[0-9]+)[\\s]*(==|!=|<=|>=|<|>)[\\s]*-*([a-zA-Z_$]+|[0-9]+)", // int var/constant to int var/constant
+            "[\\s]*!*[a-zA-Z_$]+[$\\w]*[\\s]*", // single bool var
+            "!*[a-zA-Z_$]+[$\\w]*[\\s]*(==|!=|&&|[|]{2})[\\s]*!*[a-zA-Z_$]+[$\\w]*", // bool var to bool var
+            "-*([a-zA-Z_$]+[$\\w]*|[0-9]+)[\\s]*(==|!=|<=|>=|<|>)[\\s]*-*([a-zA-Z_$]+[$\\w]*|[0-9]+)", // int var/constant to int var/constant
         };
         String pattern = "[(](";
         for (int i = 0; i < pats.length; i++){
