@@ -1,3 +1,7 @@
-while (x == !x) {
-    anything here
+while (x == 10) {
+    hatdog 
+}
+
+while (x + 10) {
+    hehe
 }
