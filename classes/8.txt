@@ -1,0 +1,7 @@
+// infinite loop
+int count = 0;
+
+while (true) {
+    System.out.println("Count: " + count);
+    count++;
+}

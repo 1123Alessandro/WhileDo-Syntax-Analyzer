@@ -1,0 +1,15 @@
+// nested while loops
+int outerCount = 0;
+
+while (outerCount < 3) {
+    System.out.println("Outer while loop count: " + outerCount);
+
+    int innerCount = 0;
+
+    while (innerCount < 2) {
+        System.out.println("Inner while loop count: " + innerCount);
+        innerCount++;
+    }
+
+    outerCount++;
+}
