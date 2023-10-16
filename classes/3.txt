@@ -2,6 +2,9 @@
 int count = 1;
 
 while (!(count < 10)) {
+    /* FAIL: !(count < 10) is equivalent to count >= 10,
+    so the condition is not met from the beginning,
+    and the loop's body will not execute */
     System.out.println("Count: " + count);
     count++;
 }

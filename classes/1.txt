@@ -2,6 +2,7 @@
 int count = 5;
 
 while (count > 10) {
+    // FAIL: wrong operator used in the logic condition
     System.out.println("Count: " + count);
     count++;
 }

@@ -4,5 +4,5 @@ int x, y;
 
 while (num > 0) {
     x = 5;
-    !y = 10;
+    !y = 10; // FAIL: '!' cannot be used as an assignment operator
 }
