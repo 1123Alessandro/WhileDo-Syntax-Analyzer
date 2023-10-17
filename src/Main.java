@@ -75,19 +75,20 @@ public class Main {
     }
 
     public static boolean checkWhile(RegExer re, String text) {
+        System.out.println("Running checkWhile()...");
         String[][] errors = {
             {"\\([^()]*\\)[\\s]*[{][^{}]*[}]", "No while keyword found"},
             {"while[\\s]+[^()]+\\)[\\s]*[{][^{}]*[}]", "Unbalanced Parenthesis"},
             {"while[\\s]*\\([^()]+[\\s]*[{][^{}]*[}]", "Unbalanced Parenthesis"},
             {"while[\\s]+[^()]*[\\s]*[{][^{}]*[}]", "Invalid argument"},
-            {"while[\\s]*\\([^()]+\\)[\\s]*[\\S]+[\\s]*[{][^{}]*[}]", "Statement/s outside of block"},
-            {"while[\\s]+[\\S]*[\\s]*[{][^{}]*[}]", "No while condition found"},
+            {"while[\\s]*\\([^()]+\\)[\\s]*[\\S]+[\\s]*[{][^{}]*[}]", "Statement/s outside of while block"},
+            {"while[\\s]+[\\S]*[\\s]*[{][^{}]*[}]", "No acceptable while condition found"},
         };
 
         boolean found = false;
         for (String[] error: errors) {
             String[] matches = re.findPattern(error[0], text);
-            if (matches.length > 0)
+            if (matches.length > 0) {
                 found = true;
                 // System.out.println("Found :: " + matches.length);
                 for (String s: matches) {
@@ -95,7 +96,38 @@ public class Main {
                     System.out.println("Error: " + error[1]);
                     System.out.println();
                 }
+            }
         }
+        return found;
+    }
+
+    public static boolean checkLogic(RegExer re, String text) {
+        String whilePattern = "while\\s*\\((?<logic>[^()]*)\\)\\s*\\{";
+        String m = re.extractWhileCondition(whilePattern, text);
+        // System.out.println(m);
+
+        String[][] errors = {
+            {"[\\s\\W]+!+[0-9]+[\\s\\W]+", "Incompatible types"},
+            {"[\\s]+-*[a-zA-Z_$]+[\\s]+", "Not a logical statement"},
+            {"[\\s]*(!*|-*)[0-9]+[$\\w]+\\s*", "Improper variable name"},
+            {"!+\\s*[\\w]+\\s*(<=|>=|<|>)\\s*!*\\s*[\\w]+", "Incorrect operators"},
+            {"!*\\s*[\\w]+\\s*(<=|>=|<|>)\\s*!+\\s*[\\w]+", "Incorrect operators"},
+            {"-+\\s*[\\w]+\\s*(&&|[|]{2})\\s*-*\\s*[\\w]+", "Incorrect operators"},
+        };
+
+        boolean found = false;
+        for (String[] error: errors) {
+            String[] matches = re.findPattern(error[0], m);
+            if (matches.length > 0) {
+                found = true;
+                for (String s: matches) {
+                    System.out.println(s);
+                    System.out.println("Error: " + error[1]);
+                    System.out.println();
+                }
+            }
+        }
+
         return found;
     }
 
@@ -151,9 +183,11 @@ public class Main {
         for (String s : matches) {
             // System.out.println(s);
             boolean content = findContent(re, s);
+            boolean logic = findLogic(re, s);
             // if (!content) checkContent(re, s);
-            System.out.println("============================== "+ content);
-            System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
+            if (!logic) checkLogic(re, s);
+            System.out.println("============================== content: " + content);
+            System.out.println("============================== logic: " + logic);
         }
 
         if (matches.length < 1)
