@@ -54,6 +54,7 @@ public class Main {
             "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[\\w]*[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+[\\w]*|[0-9]+)[\\s]*;[\\s]*", // variable declaration with assignment
             "[\\s]*[a-zA-Z_$]+[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z]+|[0-9]+)[\\s]*;[\\s]*", // variable assignment
             "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[$\\w]*[\\s]*;[\\s]*", // variable declaration
+            "[\\s]*[a-zA-Z_$]+[\\w]*\\s*([+]{2}|[-]{2})\\s*;\\s*", // variable ++ or --
             // "[\\s]*(int|float|char|double|long)?[\\s]+[a-zA-Z_$]+[\\s]*(=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+|[0-9]+);[\\s]*",
             // "[\\s]*",
             // ".*",
@@ -159,7 +160,7 @@ public class Main {
             boolean logic = findLogic(re, s);
             if (!logic) checkLogic(re, s);
             if (!content) {
-                System.out.println("Error: Syntax of the content is incorrect and outside of our scope");
+                System.out.println("Error: Syntax of the content is incorrect or outside of our scope");
                 System.out.println();
             }
             System.out.println("\n==========\nConclusion: " + validityChecker(content && logic) + "\n==========\n");
