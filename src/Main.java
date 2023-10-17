@@ -7,7 +7,7 @@ public class Main {
     // DONE: parse the main structure of the while loop
     // DONE: detect all while loops within the same level
     public static String[] findWhile(RegExer re, String text) {
-        String pattern = "while[\\s]+[(][^()]+[)][\\s]+[{]([^{}]+)*[}]";
+        String pattern = "while[\\s]*[(][^()]+[)][\\s]*[{]([^{}]+)*[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
@@ -40,7 +40,7 @@ public class Main {
     // TODO: parse the content area of the while loop to include nested whiles
     public static boolean findContent(RegExer re, String text) {
         // get the content of the while loop
-        String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+(?<content>[{]([^{}]+)*[}])";
+        String whilePattern = "while[\\s]*[(][^()]+[)][\\s]*(?<content>[{]([^{}]+)*[}])";
         // String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+[{](?<content>[^{}]+)*[}]";
         Pattern p = Pattern.compile(whilePattern, Pattern.DOTALL);
         Matcher m = p.matcher(text);
@@ -50,7 +50,7 @@ public class Main {
 
         String[] pats = {
             "[\\s]*;[\\s]*", // just a semicolon
-            "[\\s]*([a-zA-Z]+.)*[a-zA-Z]+[(][\"'\\w]*[)][\\s]*;[\\s]*", // calling functions
+            // "[\\s]*([a-zA-Z]+.)*[a-zA-Z]+[(][\"'\\w]*[)][\\s]*;[\\s]*", // calling functions
             "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[\\w]*[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z_$]+[\\w]*|[0-9]+)[\\s]*;[\\s]*", // variable declaration with assignment
             "[\\s]*[a-zA-Z_$]+[\\s]*(=|[+]=|-=|[*]=|/=)[\\s]*([a-zA-Z]+|[0-9]+)[\\s]*;[\\s]*", // variable assignment
             "[\\s]*[a-zA-Z]+[\\s]*[a-zA-Z_$]+[$\\w]*[\\s]*;[\\s]*", // variable declaration
@@ -74,6 +74,31 @@ public class Main {
         return text.matches(pattern);
     }
 
+    public static boolean checkWhile(RegExer re, String text) {
+        String[][] errors = {
+            {"\\([^()]*\\)[\\s]*[{][^{}]*[}]", "No while keyword found"},
+            {"while[\\s]+[^()]+\\)[\\s]*[{][^{}]*[}]", "Unbalanced Parenthesis"},
+            {"while[\\s]*\\([^()]+[\\s]*[{][^{}]*[}]", "Unbalanced Parenthesis"},
+            {"while[\\s]+[^()]*[\\s]*[{][^{}]*[}]", "Invalid argument"},
+            {"while[\\s]*\\([^()]+\\)[\\s]*[\\S]+[\\s]*[{][^{}]*[}]", "Statement/s outside of block"},
+            {"while[\\s]+[\\S]*[\\s]*[{][^{}]*[}]", "No while condition found"},
+        };
+
+        boolean found = false;
+        for (String[] error: errors) {
+            String[] matches = re.findPattern(error[0], text);
+            if (matches.length > 0)
+                found = true;
+                // System.out.println("Found :: " + matches.length);
+                for (String s: matches) {
+                    System.out.println(re.replace("[\\s&&[^ ]]+", "", s));
+                    System.out.println("Error: " + error[1]);
+                    System.out.println();
+                }
+        }
+        return found;
+    }
+
     public static String[] checkContent(RegExer re, String text) {
         String whilePattern = "while[\\s]+[(][^()]+[)][\\s]+[{](?<content>[^{}]+)*[}]";
         Pattern p = Pattern.compile(whilePattern, Pattern.DOTALL);
@@ -82,9 +107,22 @@ public class Main {
         text = m.group("content");
 
         // System.out.println(text);
+        // System.out.println();
         String[][] errors = {
-            {""},
+            // Variable declaration with assignment
+            {"[\\s]*[0-9]+[a-zA-Z]*[\\s]*[0-9]+[a-zA-Z_$]*[\\w]*[\\s]*[\\W]+[\\s]*([0-9]+[a-zA-Z_$]+)[\\s]*;[\\s]*", "Not an assignment statement"},
         };
+
+        for (int i = 0; i < errors.length; i++) {
+            String[] matches = re.findPattern(errors[i][0], text);
+            System.out.println("Length :: " + matches.length);
+            if (matches.length > 0)
+                for (String s: matches) {
+                    System.out.println(re.replace("[\\s&&[^ ]]+", "", s));
+                    System.out.println("Error: " + errors[i][1]);
+                    System.out.println();
+                }
+        }
         return null;
     }
 
@@ -113,10 +151,13 @@ public class Main {
         for (String s : matches) {
             // System.out.println(s);
             boolean content = findContent(re, s);
-            if (!content) checkContent(re, s);
+            // if (!content) checkContent(re, s);
             System.out.println("============================== "+ content);
             System.out.println("==================== Conclusion: " + validityChecker(findLogic(re, s)) + " ====================");
         }
+
+        if (matches.length < 1)
+            checkWhile(re, text);
 
 
     }
