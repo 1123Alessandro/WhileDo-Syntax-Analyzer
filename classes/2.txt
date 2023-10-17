@@ -1,0 +1,7 @@
+// while loop with a constant condition
+int count = 1;
+
+while (5 < 10) {
+    System.out.println("Count: " + count);
+    count++;
+}   // SUCCESS: condition will be executed once
