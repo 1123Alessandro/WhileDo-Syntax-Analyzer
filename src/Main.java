@@ -53,7 +53,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        CodeReader obj = new CodeReader("test.txt");
+        CodeReader obj = new CodeReader("classes/test.txt");
         String text = obj.output();
         System.out.println("Original code:------------------------------------");
         System.out.print(text);
