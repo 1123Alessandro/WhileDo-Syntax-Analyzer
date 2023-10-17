@@ -4,16 +4,15 @@ import java.io.*;
 
 public class Main {
 
-    // DONE: parse the main structure of the while loop
-    // DONE: detect all while loops within the same level
+    // Checks for the main components of a while loop: the while keyword, the condition, and the commands block
     public static String[] findWhile(RegExer re, String text) {
         String pattern = "while[\\s]*[(][^()]+[)][\\s]*[{]([^{}]+)*[}]";
         String[] matches = re.findPattern(pattern, text);
         return matches;
     }
 
-    // DONE: parse the logic area of the while loop
-    // DONE: bugfix regex
+    // Checks for the basic logic structure of the while condition.
+    // Includes relational and logical operators
     public static boolean findLogic(RegExer re, String text) {
         String whilePattern = "while\\s*(\\([^)]*\\))\\s*\\{";
         String m = re.extractWhileCondition(whilePattern, text);
@@ -33,7 +32,7 @@ public class Main {
         return m.matches(pattern);
     }
 
-    // TODO: parse the content area of the while loop to include nested whiles
+    // Checks the inside of the while loop for any recognizable basic assignment statements
     public static boolean findContent(RegExer re, String text) {
         // get the content of the while loop
         String whilePattern = "while[\\s]*[(][^()]+[)][\\s]*(?<content>[{]([^{}]+)*[}])";
@@ -57,6 +56,8 @@ public class Main {
         return text.matches(pattern);
     }
 
+    // if findWhile() fails to match a while loop, this function checks for any recognizable error
+    // if the error is not recognized, it will just return false without any error message
     public static boolean checkWhile(RegExer re, String text) {
         System.out.println("Running checkWhile()...");
         String[][] errors = {
@@ -83,6 +84,7 @@ public class Main {
         return found;
     }
 
+    // if findLogic() fails, this function looks for any recognizable errors in the while condition
     public static boolean checkLogic(RegExer re, String text) {
         String whilePattern = "while\\s*\\((?<logic>[^()]*)\\)\\s*\\{";
         String m = re.extractWhileCondition(whilePattern, text);
@@ -112,6 +114,7 @@ public class Main {
         return found;
     }
 
+    // returns a string for when a check is valid and when it isn't
     public static String validityChecker(boolean flag) {
         if(flag == true) {
             return "Valid Syntax";
@@ -121,6 +124,10 @@ public class Main {
         }
     }
 
+    // the entire structure of the program
+    // outputs the txt file that has been read
+    // then outputs any possible errors it can find
+    // as well as the conclusion for the overall code snippet
     public static void main(String[] args) throws IOException {
         CodeReader obj = new CodeReader("test.txt");
         String text = obj.output();
@@ -128,7 +135,6 @@ public class Main {
         System.out.print(text);
         System.out.println("--------------------------------------------------");
 
-        // DONE: pattern of the whole program
         RegExer re = new RegExer();
 
         String[] matches = findWhile(re, text);
