@@ -1,7 +1,3 @@
-while (x == 10) {
-    hatdog 
-}
+while (x >= !10x) {
 
-while (x + 10) {
-    hehe
 }

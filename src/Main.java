@@ -186,8 +186,7 @@ public class Main {
             boolean logic = findLogic(re, s);
             // if (!content) checkContent(re, s);
             if (!logic) checkLogic(re, s);
-            System.out.println("============================== content: " + content);
-            System.out.println("============================== logic: " + logic);
+            System.out.println("\n==========\nConclusion: " + validityChecker(content && logic) + "\n==========\n");
         }
 
         if (matches.length < 1)
