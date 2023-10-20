@@ -1,6 +1,8 @@
-REM java classes/Main
 cd classes
+@echo off
 cls
-java Main
+set /p file=... 
+cls
+java Main %file%
 @echo off
 cd ..
