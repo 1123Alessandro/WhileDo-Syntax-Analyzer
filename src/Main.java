@@ -129,8 +129,10 @@ public class Main {
     // then outputs any possible errors it can find
     // as well as the conclusion for the overall code snippet
     public static void main(String[] args) throws IOException {
-        CodeReader obj = new CodeReader("test.txt");
+        String file = (args.length > 0) ? args[0] + ".txt" : "test.txt";
+        CodeReader obj = new CodeReader(file);
         String text = obj.output();
+        System.out.println(file);
         System.out.println("Original code:------------------------------------");
         System.out.print(text);
         System.out.println("--------------------------------------------------");
