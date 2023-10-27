@@ -149,8 +149,12 @@ public class Main {
             System.out.println("\n==========\nConclusion: " + validityChecker(content && logic) + "\n==========\n");
         }
 
+        boolean found = true;
         if (matches.length < 1)
-            checkWhile(re, text);
+            found = checkWhile(re, text);
+
+        if (!found)
+            System.out.println("Error: No valid while block found");
 
 
     }
